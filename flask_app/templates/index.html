@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>MedSpec Classifier</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600;1,9..144,700&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <span class="brand-dot"></span>
+      <span class="brand-text">MedSpec Classifier</span>
+    </div>
+    <div class="nav-right">
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+        <svg class="icon-sun" width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.1 3.1l1 1M11.9 11.9l1 1M3.1 12.9l1-1M11.9 4.1l1-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <svg class="icon-moon" width="15" height="15" viewBox="0 0 16 16" fill="none" style="display:none"><path d="M13.5 8.5A5.5 5.5 0 016 2a6.5 6.5 0 100 12 5.5 5.5 0 007.5-5.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="overview">Overview</button>
+    <button class="tab-btn" data-tab="results">Results</button>
+    <button class="tab-btn tab-demo" data-tab="demo">&#9654; Live Demo</button>
+  </div>
+</nav>
+
+<main class="tab-main">
+
+  <!-- OVERVIEW -->
+  <div class="tab-panel active" id="tab-overview">
+    <div class="hero">
+      <div class="hero-bg">
+        <div class="grid-overlay"></div>
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-pill">
+          <span class="pill-dot"></span>
+          Medical NLP &nbsp;·&nbsp; 15 Specialties &nbsp;·&nbsp; 3 Models
+        </div>
+        <h1 class="hero-title">
+          <em>Medical Specialty Classification</em><br/>
+        </h1>
+        <p class="hero-sub">
+          Clinical transcriptions classified into 15 medical specialties.
+          TF-IDF, CNN-LSTM, and BioM-BERT-Large evaluated under identical
+          data + split conditions.
+        </p>
+
+        <div class="stat-strip">
+          <div class="stat-item">
+            <span class="stat-val" data-target="5436">0</span>
+            <span class="stat-lbl">Transcriptions</span>
+          </div>
+          <div class="stat-sep"></div>
+          <div class="stat-item">
+            <span class="stat-val" data-target="15">0</span>
+            <span class="stat-lbl">Specialties</span>
+          </div>
+          <div class="stat-sep"></div>
+          <div class="stat-item">
+            <span class="stat-val stat-pct" data-target="81.97">0</span>
+            <span class="stat-lbl">Best Accuracy</span>
+          </div>
+          <div class="stat-sep"></div>
+          <div class="stat-item">
+            <span class="stat-val stat-f1" data-target="0.8162">0</span>
+            <span class="stat-lbl">Best Macro F1</span>
+          </div>
+        </div>
+
+        <div class="model-strip">
+          <div class="model-chip chip-bert" onclick="switchTab('results')">
+            <span class="chip-dot dot-teal"></span>
+            <div>
+              <div class="chip-name">BioM-BERT-Large</div>
+              <div class="chip-stat">81.49% &nbsp;·&nbsp; F1 0.8162</div>
+            </div>
+            <span class="chip-badge">Best F1</span>
+          </div>
+          <div class="model-chip chip-cnn" onclick="switchTab('results')">
+            <span class="chip-dot dot-blue"></span>
+            <div>
+              <div class="chip-name">CNN-LSTM</div>
+              <div class="chip-stat">81.97% &nbsp;·&nbsp; F1 0.8120</div>
+            </div>
+            <span class="chip-badge badge-blue">Best Acc</span>
+          </div>
+          <div class="model-chip chip-tfidf" onclick="switchTab('results')">
+            <span class="chip-dot dot-amber"></span>
+            <div>
+              <div class="chip-name">TF-IDF</div>
+              <div class="chip-stat">76.22% &nbsp;·&nbsp; F1 0.7651</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="switchTab('demo')">
+            Try Live Demo
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="btn-ghost" onclick="switchTab('results')">View Results</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="key-strip">
+      <div class="container key-inner">
+        <div class="key-item"><span class="key-delta">+21%</span><span class="key-desc">Label taxonomy removal</span></div>
+        <div class="key-sep"></div>
+        <div class="key-item"><span class="key-delta kd-blue">+19%</span><span class="key-desc">Back-translation augmentation</span></div>
+        <div class="key-sep"></div>
+        <div class="key-item"><span class="key-delta kd-amber">+4%</span><span class="key-desc">GroupShuffleSplit</span></div>
+        <div class="key-sep"></div>
+        <div class="key-item"><span class="key-desc"><em>Data decisions &gt; model architecture</em></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="tab-panel" id="tab-results">
+    <div class="container panel-content">
+
+      <div class="panel-header">
+        <span class="panel-tag">Head-to-Head</span>
+        <h2 class="panel-title"><em>Model Comparison</em></h2>
+        <p class="panel-desc">All models on augmented 15-specialty dataset, GroupShuffleSplit 80/20.</p>
+      </div>
+
+      <!-- Comparison table -->
+      <div class="table-wrap">
+        <table class="data-table results-tbl">
+          <thead>
+            <tr><th>Model</th><th>Accuracy</th><th>Macro Precision</th><th>Macro Recall</th><th>Weighted F1</th><th>Macro F1</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="mpill mpill-amber">TF-IDF + LR</span></td><td class="mono">76.22%</td><td class="mono">76.62%</td><td class="mono">77.49%</td><td class="mono">0.7650</td><td class="mono">0.7651</td></tr>
+            <tr><td><span class="mpill mpill-amber">TF-IDF + SVM</span></td><td class="mono">75.70%</td><td class="mono">75.46%</td><td class="mono">76.91%</td><td class="mono">0.7573</td><td class="mono">0.7587</td></tr>
+            <tr><td><span class="mpill mpill-blue">CNN-LSTM</span></td><td class="mono hi-blue fw6">81.97% ↑</td><td class="mono">80.98%</td><td class="mono">82.71%</td><td class="mono">0.8217</td><td class="mono">0.8120</td></tr>
+            <tr class="best-row"><td><span class="mpill mpill-teal">BioM-BERT-Large ★</span></td><td class="mono">81.49%</td><td class="mono">81.72%</td><td class="mono">83.40%</td><td class="mono">0.8200</td><td class="mono hi-teal fw6">0.8162 ↑</td></tr>
+          </tbody>
+        </table>
+        <div class="metric-note">
+          <span class="mn-chip mn-blue">↑ Best Accuracy</span> CNN-LSTM 81.97%
+          &nbsp;·&nbsp;
+          <span class="mn-chip mn-teal">↑ Best Macro F1</span> BioM-BERT 0.8162 — recommended for imbalanced eval
+        </div>
+      </div>
+
+      <!-- Model deep dive cards -->
+      <div class="section-label" style="margin-top:44px">Per-Model Analysis</div>
+      <div class="model-grid">
+        <!-- TF-IDF -->
+        <div class="mcard">
+          <div class="mcard-top">
+            <span class="mbadge mbadge-amber">TF-IDF</span>
+            <div class="mnums"><span class="macc">76.22%</span><span class="mlbl">accuracy</span><span class="mf1 mono">F1 0.77</span></div>
+          </div>
+          <p class="mdesc">Custom medical tokenizer preserving ICD codes + dosages. PMI-based bigram detection. 50k-feature TF-IDF, sublinear TF scaling. Two classifiers: LR + LinearSVC.</p>
+          <div class="mperf">
+            <div class="mrow"><span class="mpl">Best</span><span class="pill ok">Pain Mgmt 0.96</span><span class="pill ok">Ophthalmology 0.95</span></div>
+            <div class="mrow"><span class="mpl">Worst</span><span class="pill bad">Pediatrics-Neonatal LR 0.44</span><span class="pill bad">Neurosurgery SVM 0.47</span></div>
+          </div>
+          <div class="mnote"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M6.5 5.5v3M6.5 4v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Neurosurgery ↔ Neurology confusion expected — shared vocab. LR beats SVM on most classes.</div>
+        </div>
+        <!-- CNN-LSTM -->
+        <div class="mcard mcard-blue">
+          <span class="mbest-tag" style="color:var(--blue);background:rgba(96,165,250,.12);border-color:rgba(96,165,250,.3)">Best Accuracy</span>
+          <div class="mcard-top">
+            <span class="mbadge mbadge-blue">CNN-LSTM</span>
+            <div class="mnums"><span class="macc hi-blue">81.97%</span><span class="mlbl">accuracy</span><span class="mf1 mono">F1 0.81</span></div>
+          </div>
+          <p class="mdesc">Word2Vec skip-gram (dim=200). TextCNN parallel filters [2,3,4] → bigrams, trigrams, four-grams. LSTM hidden=200. Dropout 0.5.</p>
+          <div class="mperf">
+            <div class="mrow"><span class="mpl">Best</span><span class="pill ok">Pain Mgmt 1.00</span><span class="pill ok">Neurosurgery 0.95</span><span class="pill ok">Ophthalmology 0.92</span></div>
+            <div class="mrow"><span class="mpl">Worst</span><span class="pill bad">Nephrology 0.62</span><span class="pill bad">ER Reports 0.71</span></div>
+          </div>
+          <div class="mnote"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M6.5 5.5v3M6.5 4v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Outperforms BioM-BERT on Nephrology + Pediatrics-Neonatal despite far smaller size.</div>
+        </div>
+        <!-- BioM-BERT -->
+        <div class="mcard mcard-best">
+          <span class="mbest-tag">Best Macro F1</span>
+          <div class="mcard-top">
+            <span class="mbadge mbadge-teal">BioM-BERT-Large</span>
+            <div class="mnums"><span class="macc">81.49%</span><span class="mlbl">accuracy</span><span class="mf1 mono hi-teal">F1 0.8162</span></div>
+          </div>
+          <p class="mdesc">334M params on PubMed + PMC. Smart truncation: first 175 + last 175 words preserves IMPRESSION sections. Inverse-frequency class weights. AdamW lr=1.5e-5.</p>
+          <div class="mperf">
+            <div class="mrow"><span class="mpl">Best</span><span class="pill ok">Ophthalmology 0.93</span><span class="pill ok">OB/GYN 0.92</span><span class="pill ok">Pain Mgmt 0.90</span></div>
+            <div class="mrow"><span class="mpl">Worst</span><span class="pill bad">ER Reports 0.60</span><span class="pill bad">Orthopedic 0.67 ⚠</span></div>
+          </div>
+          <div class="mnote"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M6.5 5.5v3M6.5 4v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Best Macro F1 (0.8162) → recommended for imbalanced eval. Orthopedic recall (0.67) lowest across all models.</div>
+        </div>
+      </div>
+
+      <!-- BioM-BERT 6 experiments -->
+      <div class="section-label" style="margin-top:52px">BioM-BERT — Accuracy Across 6 Experiments</div>
+      <div class="chart-card">
+        <div class="chart-meta">
+          <div class="chart-legend">
+            <span class="ldot" style="background:var(--dim)"></span>Raw
+            <span class="ldot" style="background:var(--blue)"></span>Augmented 20
+            <span class="ldot" style="background:var(--accent)"></span>Refined 15
+          </div>
+          <p class="chart-note">Hover bars for details. Same architecture all 6 — only data + split vary.</p>
+        </div>
+        <div style="position:relative;height:320px;width:100%">
+          <canvas id="expChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DEMO -->
+  <div class="tab-panel" id="tab-demo">
+    <div class="container panel-content">
+      <div class="panel-header">
+        <span class="panel-tag">Interactive Inference</span>
+        <h2 class="panel-title"><em>Live Demo</em></h2>
+        <p class="panel-desc">Random clinical transcription from dataset. All three models run live — predictions vs. ground truth.</p>
+      </div>
+      <div class="demo-wrap">
+        <div class="demo-controls">
+          <button id="sampleBtn" class="sample-btn">
+            <span class="btn-icon"><svg width="17" height="17" viewBox="0 0 18 18" fill="none"><path d="M15 9A6 6 0 1 1 9 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M9 1l3 2-3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="btn-text">Try Random Sample</span>
+            <span class="btn-spin" style="display:none"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" class="spin"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5" stroke-dasharray="20 18"/></svg></span>
+          </button>
+          <p class="demo-hint">Live inference · BioM-BERT ~1–3s on CPU</p>
+        </div>
+        <div id="demoEmpty" class="demo-empty">
+          <div class="empty-icon"><svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="8" y="12" width="32" height="28" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M16 20h16M16 26h10M16 32h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="36" cy="12" r="7" fill="var(--accent)"/><path d="M36 9.5v3l1.5 1" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+          <p>Click "Try Random Sample" to run live inference.</p>
+        </div>
+        <div id="demoResult" class="demo-result" style="display:none">
+          <div class="res-top">
+            <div><span class="res-lbl">Ground Truth</span><span class="res-specialty" id="resultTruth">—</span></div>
+            <span class="word-badge" id="wordCount">—</span>
+          </div>
+          <div class="transcript-block">
+            <div class="transcript-hdr"><span>Transcription</span><button class="show-more" id="toggleFull">Show full ▼</button></div>
+            <p id="transcriptPreview" class="transcript-text">—</p>
+            <p id="transcriptFull" class="transcript-text" style="display:none">—</p>
+          </div>
+          <div class="pred-block">
+            <span class="res-lbl">Predictions</span>
+            <div class="pred-grid" id="predCards"></div>
+          </div>
+          <div class="score-strip" id="scoreBar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="nav-brand"><span class="brand-dot"></span><span class="brand-text">MedSpec Classifier</span></div>
+    <p class="footer-note">Medical specialty classification from clinical transcriptions &nbsp;·&nbsp; MTSamples dataset</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

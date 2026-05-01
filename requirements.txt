@@ -1,0 +1,21 @@
+# Core ML / NLP
+torch>=2.0.0
+transformers>=4.35.0
+scikit-learn==1.6.1
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Text processing
+nltk>=3.8.0
+deep-translator>=1.11.0
+
+# Visualisation
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Web app (Phase 2)
+flask>=3.0.0
+
+# Notebook
+ipywidgets>=8.0.0
+jupyter>=1.0.0
